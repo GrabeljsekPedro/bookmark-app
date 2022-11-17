@@ -6,7 +6,7 @@ const websiteNameEl = document.getElementById('website-name');
 const websiteUrlEl = document.getElementById('website-url');
 const bookmarksContainer = document.getElementById('bookmarks-container');
 
-let bookmarks = [];
+let bookmarks = {};
 
 // Show modal, Focus on Input
 function showModal() {
@@ -40,8 +40,8 @@ function buildBookmarks() {
     // Remove Bookmarks DOM
     bookmarksContainer.textContent = '';
     // Build items
-    bookmarks.forEach((bookmark) => {
-        const {name, url} = bookmark;
+    Object.keys(bookmarks).forEach((id) => {
+        const { name, url } = bookmarks[id];
         // Item
         const item = document.createElement('div');
         item.classList.add('item');
@@ -76,23 +76,21 @@ function fetchBookmarks() {
         bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
     } else {
         // Create bookmarks array in localStorage
-        bookmarks = [
-            {
-                name: 'CSS Tricks',
-                url: 'https://css-tricks.com',
-            },
-        ];
+        const id = 'https://css-tricks.com';
+        bookmarks[id] = {
+            name: 'CSS Tricks',
+            url: 'https://css-tricks.com',
+        };
+
         localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
     }
     buildBookmarks();
 }
-
-function deleteBookmark(url) {
-    bookmarks.forEach((bookmark, i) => {
-        if (bookmark.url === url) {
-            bookmarks.splice(i, 1)
-        }
-    });
+// Delete Bookmark
+function deleteBookmark(id) {
+    if (bookmarks[id]) {
+        delete bookmarks[id];
+    }
     // Update bookmarks array in localStorage, re-populate DOM
     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
     fetchBookmarks();
@@ -113,7 +111,7 @@ function storeBookmark(e) {
         name: nameValue,
         url: urlValue,
     };
-    bookmarks.push(bookmark);
+    bookmarks[urlValue] = bookmark;
     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
     fetchBookmarks();
     bookmarkForm.reset();
