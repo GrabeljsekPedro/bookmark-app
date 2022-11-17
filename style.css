@@ -103,7 +103,6 @@ a:active {
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: modalopen 1s;
 }
 
 .modal {
@@ -111,6 +110,7 @@ a:active {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
     max-width: 95%;
     width: 500px;
+    animation: modalopen 1s;
 }
 
 @keyframes modalopen {
